@@ -17,7 +17,7 @@ function App() {
           Master PokéMart
         </Navbar.Brand>
         <Nav className="ml-auto">
-          <Nav.Link href="https://about.me/jvmelop" target="_blank">Desenvolvedor</Nav.Link>
+          <Nav.Link href="https://about.me/jvmelop" target="_blank">Developer</Nav.Link>
         </Nav>
       </Navbar>
 
@@ -32,14 +32,10 @@ function App() {
       <footer>
         João Vítor de Melo @ 2020
         <br/>
-        <a href="https://about.me/jvmelop" target="_blank" rel="noopener noreferrer" >{"> Sobre mim e Contato <"}</a>
+        <a href="https://about.me/jvmelop" target="_blank" rel="noopener noreferrer" >{"> About me & Contact <"}</a>
         <br/>
         Hiring Coders | Gama Academy
       </footer>
-
-     
-
-
     </div>
   );
 }

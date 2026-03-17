@@ -83,7 +83,7 @@ export default class FilterMenu extends Component{
       <button onClick={handler} id="reset-button">
         <img 
           src={'https://icon-library.com/images/cancel-icon-transparent/cancel-icon-transparent-2.jpg'} 
-          alt="Resetar Filtro"
+          alt="Reset Filter"
           height="15px">
         </img>
       </button>
@@ -97,7 +97,7 @@ export default class FilterMenu extends Component{
         <Container fluid >
           <Row id="filter-title-row" className="py-3">
             <Col xs={12} className='filter-title'>
-              <h1 id="filter-title-text">Filtros de Busca</h1>
+              <h1 id="filter-title-text">Search Filters</h1>
             </Col>
           </Row>
           <Row className="px-0">
@@ -106,12 +106,12 @@ export default class FilterMenu extends Component{
           <Col xs={4} md={12} className="filter-div px-0" >
             <Row className="mx-0" >
               <Col xs={12} style={{fontSize: '16px'}} className='filter-title'>
-                <p>Nome</p>
+                <p>Name</p>
               </Col>
               <Col xs={10} className="px-0 mx-0" >
                 <Form.Control 
                     id="filter-input"
-                    placeholder="Digite aqui" 
+                    placeholder="Type here" 
                     onKeyPress={(event) => {
                       if (event.key==='Enter') 
                         this.handleSearchName()
@@ -134,12 +134,12 @@ export default class FilterMenu extends Component{
             <Col xs={4} md={12} className="filter-div px-0" >
               <Row className="mx-0">
               <Col xs={12} style={{fontSize: '16px'}} className='filter-title'>
-                <p>Por Tipos</p>
+                <p>By Types</p>
               </Col>
               <Col xs={12} lg={5} className="px-0 mx-0">
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="filter-input">
-                    {this.state.type_1 || "Nenhum"}
+                    {this.state.type_1 || "None"}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
@@ -156,7 +156,7 @@ export default class FilterMenu extends Component{
               <Col xs={12} lg={5} className="px-0 mx-0">
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="filter-input">
-                    {this.state.type_2 || "Nenhum"}
+                    {this.state.type_2 || "None"}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
@@ -180,12 +180,12 @@ export default class FilterMenu extends Component{
             <Col xs={4} md={12} className="filter-div px-0" >
               <Row className="mx-0" >
               <Col xs={12} style={{fontSize: '16px'}} className='filter-title'>
-                <p>Por Região</p>
+                <p>By Region</p>
               </Col>
               <Col xs={12} lg={10} className="px-0 mx-0">
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="filter-input">
-                    {this.state.region || "Nenhum"}
+                    {this.state.region || "None"}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>

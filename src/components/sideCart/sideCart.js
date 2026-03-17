@@ -89,19 +89,13 @@ export default class SideCart extends Component {
     }
   }
 
-  // clearList = () => {
-  //   store.dispatch({
-  //     type: "CLEAR_LIST",
-  //   })
-  // }
-
   render() {
 
     return (
       <Col xs={5} sm={4} md={2} lg={2} className="poke-cart-div">
         <Row id="cart-title-row" className="py-2">
           <Col xs={8} md={6}>
-            <h1 id="cart-title-text">Carrinho</h1>
+            <h1 id="cart-title-text">Cart</h1>
           </Col>
           <Col xs={2} md={3}>
             <img src={cartIcon} height={'45px'} alt="cartn-ball" />
@@ -145,7 +139,7 @@ export default class SideCart extends Component {
                   <Col xs={1} id="item-quantity">{item.quantity}x </Col>
                   <Col xs={9} lg={5} id="item-poke-name">{item.name}</Col>
                   <Col xs={1} id="item-shiny">{(item.shiny) ? "★" : ""}</Col>
-                  <Col xs={12} lg={5} id="item-price">R$ {item.priceStr}</Col>
+                  <Col xs={12} lg={5} id="item-price">$ {item.priceStr}</Col>
                 </Row>
               )
             })
@@ -154,12 +148,12 @@ export default class SideCart extends Component {
         </Container>
         <Row id="total-price-row">
           <Col xs={12} md={2}>Total </Col>
-          <Col xs={12} md={10} style={{ color: 'rgb(255,56,92)' }}>R$ {this.state.totalPriceStr}</Col>
+          <Col xs={12} md={10} style={{ color: 'rgb(255,56,92)' }}>$ {this.state.totalPriceStr}</Col>
         </Row>
         {
           this.state.items.length > 0 ?
             <Button id="buy-btn" className="mt-3" onClick={() => { this.handleBuy('show') }} >
-              Comprar
+              Buy
             </Button> : ''
         }
 
@@ -167,7 +161,7 @@ export default class SideCart extends Component {
         {/** MODAL OBRIGADO */}
         <Modal show={this.state.showModal} onHide={() => { this.handleBuy('close') }}>
           <Modal.Header closeButton>
-            <Modal.Title>Obrigado, treinador!</Modal.Title>
+            <Modal.Title>Thanks, trainer!</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Col className="modal-thanks-div" xs={12}>
@@ -176,7 +170,7 @@ export default class SideCart extends Component {
             height="100px"
             alt="thanks"></img>
             <p>
-              Seus Pokémon foram comprados com sucesso :)
+              Your Pokémon have been successfully purchased :)
             </p>
             </Col>
             <Container className="px-4">
@@ -186,20 +180,20 @@ export default class SideCart extends Component {
                     <Col xs={1} id="item-quantity">{item.quantity}x </Col>
                     <Col xs={5} id="item-poke-name">{item.name}</Col>
                     <Col xs={1} id="item-shiny">{(item.shiny) ? "★" : ""}</Col>
-                    <Col xs={5} id="item-price">R$ {item.priceStr}</Col>
+                    <Col xs={5} id="item-price">$ {item.priceStr}</Col>
                   </Row>
                 )
               })}
             </Container>
             <Row id="total-price-row-buy">
               <Col xs={12} md={2}>Total </Col>
-              <Col xs={12} md={10} style={{ color: 'rgb(255,56,92)' }}>R$ {this.state.totalPriceStr}</Col>
+              <Col xs={12} md={10} style={{ color: 'rgb(255,56,92)' }}>$ {this.state.totalPriceStr}</Col>
             </Row>
 
           </Modal.Body>
           <Modal.Footer>
             <Button id="buy-btn" onClick={() => { this.handleBuy('close') }}>
-              Comprar mais
+              Buy More
             </Button>
           </Modal.Footer>
         </Modal>
