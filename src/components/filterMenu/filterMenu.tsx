@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Col, Container, Dropdown, Form, Row } from "react-bootstrap";
 import { getTypesList } from "../../back-end/getAPI";
 import store from "../../redux/store/store";
+import resetIcon from "../../asserts/images/refresh-2-24.png";
 import "./style.css";
 
 interface FilterMenuState {
@@ -84,7 +85,7 @@ export default class FilterMenu extends Component<Record<string, never>, FilterM
   private resetButton = (handler: () => void): React.ReactNode => (
     <button onClick={handler} id="reset-button">
       <img
-        src="https://icon-library.com/images/cancel-icon-transparent/cancel-icon-transparent-2.jpg"
+        src={resetIcon}
         alt="Reset filter"
         height="15px"
       />
