@@ -1,18 +1,128 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
 @font-face {
-  font-family: futura-LT;
-  src: url('./asserts/fonts/FuturaLT.woff');
+  font-family: "Futura LT";
+  src: url("./asserts/fonts/FuturaLT.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
 }
 
-body {
-  margin: 0;
-  font-family: futura-LT, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: "Futura LT";
+  src: url("./asserts/fonts/FuturaLT-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
 }
 
-code {
-  font-family: futura-LT, source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@theme inline {
+  --font-sans: "Futura LT", Arial, sans-serif;
+  --font-heading: "Futura LT", Arial, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  color-scheme: light;
+  --radius: 0.65rem;
+  --background: #ff0080;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --primary: #5007a3;
+  --primary-foreground: #ffffff;
+  --secondary: #f4eaff;
+  --secondary-foreground: #31075d;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4eaff;
+  --accent-foreground: #31075d;
+  --destructive: #dc2626;
+  --border: #e4e4e7;
+  --input: #d4d4d8;
+  --ring: #8b27d4;
+}
+
+@layer components {
+  .panel-text-shadow {
+    text-shadow: 2px 2px 2px rgb(0 0 0);
+  }
+
+  .catalog-title {
+    text-shadow: 4px 4px 2px rgb(0 0 0 / 17.8%);
+  }
+
+  .pagination-button {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: url("./asserts/images/page-btn.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: white;
+    font-family: fantasy;
+    font-size: 14px;
+    font-weight: 400;
+    transition: transform 300ms;
+  }
+
+  .pagination-button[aria-current="page"] {
+    background-image: url("./asserts/images/page-btn-active.png");
+  }
+
+  .pagination-button:hover {
+    transform: rotate(25deg);
+    background-color: transparent;
+    color: white;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+  }
 }

@@ -1,187 +1,160 @@
-import React, { Component } from "react";
-import { Col, Container, Dropdown, Form, Row } from "react-bootstrap";
-import { getTypesList } from "../../back-end/getAPI";
-import store from "../../redux/store/store";
-import resetIcon from "../../asserts/images/refresh-2-24.png";
-import "./style.css";
-
-interface FilterMenuState {
-  typesNames: string[];
-  regionNames: string[];
-  searchName: string | null;
-  type_1: string | null;
-  type_2: string | null;
-  region: string | null;
-}
+import { useEffect, useState, type FormEvent } from "react";
+import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getTypesList } from "@/back-end/getAPI";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import resetIcon from "@/asserts/images/reset-14414.svg";
 
 const regions = ["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova", "Kalos", "Alola"];
+const types = getTypesList();
 
-export default class FilterMenu extends Component<Record<string, never>, FilterMenuState> {
-  private unsubscribe?: () => void;
+function FilterMenu() {
+  const dispatch = useAppDispatch();
+  const filters = useAppSelector((state) => state.filters);
+  const [searchName, setSearchName] = useState(filters.searchName ?? "");
 
-  state: FilterMenuState = {
-    typesNames: ["-", ...getTypesList()],
-    regionNames: ["-", ...regions],
-    searchName: null,
-    type_1: null,
-    type_2: null,
-    region: null,
-  };
+  useEffect(() => {
+    setSearchName(filters.searchName ?? "");
+  }, [filters.searchName]);
 
-  componentDidMount(): void {
-    const syncFilters = () => this.setState(store.getState().filters);
-    syncFilters();
-    this.unsubscribe = store.subscribe(syncFilters);
-  }
-
-  componentWillUnmount(): void {
-    this.unsubscribe?.();
-  }
-
-  private handleSelectType = (selected: string | null, which: 1 | 2): void => {
-    if (which === 1) {
-      store.dispatch({
-        type: "SET_TYPE_1_FILTER",
-        type_1: selected === "-" ? null : selected,
-      });
-    } else {
-      store.dispatch({
-        type: "SET_TYPE_2_FILTER",
-        type_2: selected === "-" ? null : selected,
-      });
-    }
-  };
-
-  private handleSelectRegion = (selected: string | null): void => {
-    store.dispatch({
-      type: "SET_REGION_FILTER",
-      region: selected === "-" ? null : selected,
-    });
-  };
-
-  private handleSearchName = (): void => {
-    const searchInput = document.getElementById("filter-input") as HTMLInputElement | null;
-    const searchName = searchInput?.value ?? "";
-    store.dispatch({
+  const submitSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const value = searchName.trim();
+    dispatch({
       type: "SET_SEARCH_NAME",
-      searchName: searchName === "-" || searchName.trim() === "" ? null : searchName,
+      searchName: value === "" || value === "-" ? null : value,
     });
   };
 
-  private resetSelectsT1T2 = (): void => {
-    store.dispatch({ type: "RESET_TYPE_FILTER" });
+  const resetSearch = () => {
+    setSearchName("");
+    dispatch({ type: "RESET_SEARCH_NAME" });
   };
 
-  private resetSelectRegion = (): void => {
-    store.dispatch({ type: "RESET_REGION_FILTER" });
-  };
+  const resetTypes = () => dispatch({ type: "RESET_TYPE_FILTER" });
+  const resetRegion = () => dispatch({ type: "RESET_REGION_FILTER" });
 
-  private resetName = (): void => {
-    const searchInput = document.getElementById("filter-input") as HTMLInputElement | null;
-    if (searchInput) searchInput.value = "";
-    store.dispatch({ type: "RESET_SEARCH_NAME" });
-  };
+  return (
+    <aside className="w-full shrink-0 bg-[#5007a3] px-3 pb-5 text-white shadow-xl lg:w-[16.75%] lg:min-w-64 lg:px-4">
+      <h2 className="panel-text-shadow border-b-2 border-white/40 py-3 text-center text-base font-normal">
+        Search Filters
+      </h2>
 
-  private resetButton = (handler: () => void): React.ReactNode => (
-    <button onClick={handler} id="reset-button">
-      <img
-        src={resetIcon}
-        alt="Reset filter"
-        height="15px"
-      />
-    </button>
+      <section className="border-b border-white/20 py-3">
+        <h3 className="panel-text-shadow mb-3 text-center text-sm font-medium">Name</h3>
+        <form className="flex items-stretch" onSubmit={submitSearch}>
+          <Input
+            aria-label="Search Pokémon by name"
+            className="h-8 min-w-0 flex-1 rounded-r-none border-0 bg-white text-xs text-zinc-900 placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-fuchsia-300"
+            placeholder="Type here"
+            value={searchName}
+            onChange={(event) => setSearchName(event.target.value)}
+          />
+          <Button
+            aria-label="Search Pokémon"
+            className="h-8 w-12 shrink-0 rounded-none bg-[#31075d] text-white hover:bg-[#250449] border-none"
+            type="submit"
+          >
+            <Search aria-hidden="true" />
+          </Button>
+          <Button
+            aria-label="Reset name filter"
+            className="h-8 w-8 ml-0.5 shrink-0 rounded-l-none bg-[#31075d] p-1 text-white hover:bg-[#250449] hover:text-white border-none"
+            onClick={resetSearch}
+            type="button"
+            variant="ghost"
+          >
+            <img aria-hidden="true" className="size-4" src={resetIcon} alt="" />
+          </Button>
+        </form>
+      </section>
+
+      <section className="border-b border-white/20 py-3">
+        <h3 className="panel-text-shadow mb-3 text-center text-sm font-medium">By Types</h3>
+        <div className="flex items-center gap-2">
+          <Select
+            value={filters.type_1 ?? "none"}
+            onValueChange={(value) =>
+              dispatch({ type: "SET_TYPE_1_FILTER", type_1: value === "none" ? null : value })
+            }
+          >
+            <SelectTrigger aria-label="First Pokémon type" className="h-8 min-w-0 flex-1 bg-white text-xs text-zinc-900">
+              <SelectValue placeholder="None" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None</SelectItem>
+              {types.map((type) => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.type_2 ?? "none"}
+            onValueChange={(value) =>
+              dispatch({ type: "SET_TYPE_2_FILTER", type_2: value === "none" ? null : value })
+            }
+          >
+            <SelectTrigger aria-label="Second Pokémon type" className="h-8 min-w-0 flex-1 bg-white text-xs text-zinc-900">
+              <SelectValue placeholder="None" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None</SelectItem>
+              {types.map((type) => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+            </SelectContent>
+          </Select>
+
+          <Button
+            aria-label="Reset type filters"
+            className="size-6 text-white hover:bg-white/10 hover:text-white"
+            onClick={resetTypes}
+            size="icon-xs"
+            type="button"
+            variant="ghost"
+          >
+            <img aria-hidden="true" className="size-4" src={resetIcon} alt="" />
+          </Button>
+        </div>
+      </section>
+
+      <section className="py-3">
+        <h3 className="panel-text-shadow mb-3 text-center text-sm font-medium">By Region</h3>
+        <div className="flex items-center gap-2">
+          <Select
+            value={filters.region ?? "none"}
+            onValueChange={(value) =>
+              dispatch({ type: "SET_REGION_FILTER", region: value === "none" ? null : value })
+            }
+          >
+            <SelectTrigger aria-label="Pokémon region" className="h-8 min-w-0 flex-1 bg-white text-xs text-zinc-900">
+              <SelectValue placeholder="None" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None</SelectItem>
+              {regions.map((region) => <SelectItem key={region} value={region}>{region}</SelectItem>)}
+            </SelectContent>
+          </Select>
+
+          <Button
+            aria-label="Reset region filter"
+            className="size-6 text-white hover:bg-white/10 hover:text-white"
+            onClick={resetRegion}
+            size="icon-xs"
+            type="button"
+            variant="ghost"
+          >
+            <img aria-hidden="true" className="size-4" src={resetIcon} alt="" />
+          </Button>
+        </div>
+      </section>
+    </aside>
   );
-
-  render(): React.ReactNode {
-    return (
-      <Col xs={12} md={2} className="filter-menu-div">
-        <Container fluid>
-          <Row id="filter-title-row" className="py-3">
-            <Col xs={12} className="filter-title">
-              <h1 id="filter-title-text">Search Filters</h1>
-            </Col>
-          </Row>
-          <Row className="px-0">
-            <Col xs={4} md={12} className="filter-div px-0">
-              <Row className="mx-0">
-                <Col xs={12} style={{ fontSize: "16px" }} className="filter-title"><p>Name</p></Col>
-                <Col xs={10} className="px-0 mx-0">
-                  <Form.Control
-                    id="filter-input"
-                    placeholder="Type here"
-                    onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                      if (event.key === "Enter") this.handleSearchName();
-                    }}
-                    style={{ borderRadius: "3px 0 0 3px" }}
-                  />
-                </Col>
-                <Col xs={2} className="px-0">
-                  <button onClick={this.handleSearchName} id="search-button">
-                    <span role="img" aria-label="search-btn">🔎</span>
-                  </button>
-                </Col>
-                <Col xs={12} className="px-0 ml-1">{this.resetButton(this.resetName)}</Col>
-              </Row>
-            </Col>
-
-            <Col xs={4} md={12} className="filter-div px-0">
-              <Row className="mx-0">
-                <Col xs={12} style={{ fontSize: "16px" }} className="filter-title"><p>By Types</p></Col>
-                {[1, 2].map((which) => (
-                  <Col xs={12} lg={5} className="px-0 mx-0" key={which}>
-                    <Dropdown>
-                      <Dropdown.Toggle variant="success" id="filter-input">
-                        {(which === 1 ? this.state.type_1 : this.state.type_2) || "None"}
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        {this.state.typesNames.map((name) => (
-                          <Dropdown.Item
-                            eventKey={name}
-                            key={`${name}_T${which}`}
-                            onSelect={(selected) => this.handleSelectType(selected, which as 1 | 2)}
-                          >
-                            {name}
-                          </Dropdown.Item>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Col>
-                ))}
-                <Col xs={12} lg={1} className="px-0 ml-1" id="div-reset-types">
-                  {this.resetButton(this.resetSelectsT1T2)}
-                </Col>
-              </Row>
-            </Col>
-
-            <Col xs={4} md={12} className="filter-div px-0">
-              <Row className="mx-0">
-                <Col xs={12} style={{ fontSize: "16px" }} className="filter-title"><p>By Region</p></Col>
-                <Col xs={12} lg={10} className="px-0 mx-0">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="success" id="filter-input">
-                      {this.state.region || "None"}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {this.state.regionNames.map((name) => (
-                        <Dropdown.Item
-                          eventKey={name}
-                          key={name}
-                          onSelect={this.handleSelectRegion}
-                        >
-                          {name}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-                <Col xs={12} lg={1} className="px-0 ml-1">
-                  {this.resetButton(this.resetSelectRegion)}
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
-      </Col>
-    );
-  }
 }
+
+export default FilterMenu;

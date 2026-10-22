@@ -22,16 +22,12 @@ export default function cartItems(
   switch (action.type) {
     case "ADD_ITEM": {
       const newState = [...state, { ...action.newItem, code: Date.now() }];
-      localStorage.setItem("cartItems", JSON.stringify(newState));
       return newState;
     }
     case "DELETE_ITEM": {
-      const newState = state.filter((item) => item.code !== action.code);
-      localStorage.setItem("cartItems", JSON.stringify(newState));
-      return newState;
+      return state.filter((item) => item.code !== action.code);
     }
     case "CLEAR_LIST":
-      localStorage.setItem("cartItems", JSON.stringify([]));
       return [];
     default:
       return state;
