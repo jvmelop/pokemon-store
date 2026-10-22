@@ -14,12 +14,20 @@
     "redux": "^4.0.5"
   },
   "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-bootstrap": "^1.0.1",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^5.1.0",
+    "typescript": "^7.0.2",
     "vite": "^6.4.1"
+  },
+  "overrides": {
+    "@types/react": "$@types/react"
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
     "test": "echo \"No test runner configured\"",
     "preview": "vite preview"
   },
