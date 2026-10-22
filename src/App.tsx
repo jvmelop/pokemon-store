@@ -31,7 +31,7 @@ function App() {
         <span>João Vítor de Melo @ 2020</span>
         <a
           className="underline decoration-white/60 underline-offset-2 hover:text-fuchsia-200"
-          href="https://about.me/jvmelop"
+          href="https://www.linkedin.com/in/joaovitormp/"
           target="_blank"
           rel="noreferrer"
         >
