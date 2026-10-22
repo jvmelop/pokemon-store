@@ -125,7 +125,7 @@ export default class PokeCard extends Component<PokeCardProps, PokeCardState> {
                   />
                 ))}
               </div>
-              <h4 className="pokemon-price">R$ {priceStr}</h4>
+              <h4 className="pokemon-price">$ {priceStr}</h4>
             </div>
 
             <Form>
